@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva de Asientos - Cine Teatro Plaza</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="inner-header">
+            <h1 class="logo">Cine <span>Teatro Plaza</span></h1>
+            <nav style="display:flex; align-items:center; gap:20px;">
+                <a href="cart.html" class="cart-nav-link" style="color:var(--text-color); text-decoration:none;">🛒 (<span id="nav-cart-count">0</span>)</a>
+                <a href="index.html" class="btn-secondary" style="margin-top: 0; padding: 5px 15px;">&#8592; Volver a Cartelera</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="reserva-page">
+        <div class="reserva-header-info">
+            <h2 id="pelicula-titulo">Cargando película...</h2>
+            <p>Selecciona tus butacas para la función</p>
+        </div>
+
+        <div class="sala-cine">
+            <!-- Representación cenital -->
+            <div class="top-view-container">
+                <div class="screen-cinema-view">
+                    <div class="screen-glow"></div>
+                    <div>PANTALLA PRINCIPAL</div>
+                </div>
+
+                <div class="floor-wrapper">
+                    <div class="block-seats left" id="block-left"></div>
+                    <div class="aisle"></div>
+                    <div class="block-seats center" id="block-center"></div>
+                    <div class="aisle"></div>
+                    <div class="block-seats right" id="block-right"></div>
+                </div>
+            </div>
+
+            <div class="leyenda">
+                <div class="leyenda-item">
+                    <div class="seat-top available"></div> Libre
+                </div>
+                <div class="leyenda-item">
+                    <div class="seat-top selected"></div> Seleccionado
+                </div>
+                <div class="leyenda-item">
+                    <div class="seat-top occupied"></div> Reservado
+                </div>
+            </div>
+
+            <div class="resumen-reserva">
+                <div class="resumen-details">
+                    <p>Asientos: <span id="count">0</span></p>
+                    <p>Total: $<span id="total">0</span></p>
+                </div>
+                <button class="btn-primary" id="btn-confirmar" disabled>Selecciona Asientos</button>
+            </div>
+        </div>
+    </main>
+
+    <script src="cart-utils.js"></script>
+    <script src="reserva.js"></script>
+</body>
+</html>

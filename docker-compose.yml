@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: cine_db
+    environment:
+      POSTGRES_USER: cine_admin
+      POSTGRES_PASSWORD: cine_password
+      POSTGRES_DB: cine_plaza
+    ports:
+      - "5432:5432"
+    volumes:
+      - cine_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "cine_admin"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    container_name: cine_backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      DATABASE_URL: postgres://cine_admin:cine_password@db:5432/cine_plaza
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  cine_data:

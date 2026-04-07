@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tu Carrito - Cine Teatro Plaza</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="inner-header">
+            <h1 class="logo">Cine <span>Teatro Plaza</span></h1>
+            <nav style="display:flex; align-items:center; gap:20px;">
+                <a href="index.html" class="btn-secondary" style="margin-top: 0; padding: 5px 15px;">&#8592; Volver a Cartelera</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="cart-page">
+        <h2 style="text-align:center; color:var(--accent-color); margin-bottom: 30px;">Tu Carrito de Entradas</h2>
+        
+        <div class="cart-container" id="cart-container">
+            <!-- Items del carrito -->
+        </div>
+
+        <div class="cart-summary" id="cart-summary" style="display:none;">
+            <div class="summary-details">
+                <h3 style="font-size: 1.5rem;">Total a Pagar: <span style="color:var(--accent-color);">$<span id="cart-total-price">0</span></span></h3>
+            </div>
+            <button class="btn-primary" id="btn-pay-all" style="width:100%; font-size:1.1rem; padding: 15px;">Finalizar Compra / Pagar Todo</button>
+        </div>
+    </main>
+
+    <script src="cart-utils.js"></script>
+    <script src="cart.js"></script>
+</body>
+</html>

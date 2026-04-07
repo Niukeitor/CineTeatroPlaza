@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cine Teatro Plaza</title>
+    <meta name="description" content="Mira las películas en estreno en Cine Teatro Plaza.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="inner-header">
+            <h1 class="logo">Cine <span>Teatro Plaza</span></h1>
+            <nav style="display:flex; align-items:center; gap:20px;">
+                <a href="#cartelera">Cartelera</a>
+                <a href="#horarios">Horarios</a>
+                <a href="admin.html" id="nav-admin-link" style="display:none; color:var(--accent-color); font-weight:800; border:1px solid; padding:5px 10px; border-radius:5px;">Admin Panel</a>
+                <a href="cart.html" class="cart-nav-link">🛒 (<span id="nav-cart-count">0</span>)</a>
+                <div id="auth-container">
+                    <a href="auth.html" class="btn-primary" style="text-decoration:none; padding:8px 15px; margin:0; display:flex; align-items:center;">Iniciar Sesión</a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section id="hero" class="hero-slider">
+        <div id="hero-slides-container">
+            <!-- Cargando pasarela desde servidor... -->
+        </div>
+        <div class="slider-indicators" id="slider-indicators"></div>
+    </section>
+
+    <section id="horarios" class="horarios-section" style="padding-top: 40px; border-left: none;">
+        <div class="horarios-card" style="max-width: 800px; margin: 0 auto; width: 100%;">
+            <h2>Información General</h2>
+            <div id="dynamic-horario-status" class="horario-status" style="margin-bottom: 20px;">
+                <!-- Renderizado por JS -->
+            </div>
+            
+            <ul class="horario-list" style="margin-bottom: 25px;">
+                <li style="font-weight:bold; color:var(--accent-color); border-bottom:none; padding-bottom:0;">🎟️ Entradas:</li>
+                <li><span>Generales</span> <span class="time" id="pub-general-price">Cargando...</span></li>
+                <li><span>Lunes Populares</span> <span class="time" id="pub-popular-price">Cargando...</span></li>
+            </ul>
+            
+            <ul class="horario-list" style="margin-bottom: 25px;">
+                <li style="font-weight:bold; color:var(--accent-color); border-bottom:none; padding-bottom:0;">🕒 Horarios:</li>
+                <li><span>Viernes y Lunes</span> <span class="time" id="pub-weekdays" style="text-align: right;">Cargando...</span></li>
+                <li><span>Sábados y Domingos</span> <span class="time" id="pub-weekends" style="text-align: right;">Cargando...</span></li>
+            </ul>
+
+            <ul class="horario-list">
+                <li style="font-weight:bold; color:var(--accent-color); border-bottom:none; padding-bottom:0;">☀️ Matinée:</li>
+                <li style="justify-content:center; text-align:center; color: var(--text-secondary);"><span id="pub-matinee">Cargando datos...</span></li>
+            </ul>
+
+            <div id="pub-closure-container" style="display: none; margin-top: 15px; background: rgba(239, 68, 68, 0.1); border: 1px solid #ef4444; border-radius: 8px; padding: 15px; text-align: center;">
+                <strong style="color: #ef4444;">🚨 Aviso Especial</strong>
+                <p id="pub-closure-notice" style="margin: 5px 0 0 0; color: white; font-weight: bold;"></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cartelera" class="cartelera-section">
+        <h2>Cartelera de Estrenos</h2>
+        <div class="movies-grid" id="movies-container">
+            <!-- Cargado por JS desde la DB -->
+            <p style="text-align: center; color: var(--accent-color);">Cargando cartelera desde el servidor...</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Cine Teatro Plaza. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="cart-utils.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

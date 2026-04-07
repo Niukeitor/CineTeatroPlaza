@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Cine Teatro Plaza</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .admin-panel { max-width: 1000px; margin: 100px auto; padding: 0 20px;}
+        .admin-card { background: var(--card-bg); padding: 30px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 30px;}
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
+        .form-group input { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #334155; background: #0f1523; color: white; font-family: 'Outfit';}
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { text-align: left; padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        th { color: var(--accent-color); }
+        .btn-danger { background: #ef4444; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+        .btn-warning { background: #eab308; color: black; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="inner-header">
+            <h1 class="logo">Panel <span>Admin</span></h1>
+            <nav><a href="index.html" class="btn-secondary">Volver al Sitio</a></nav>
+        </div>
+    </header>
+
+    <div class="admin-panel">
+        <div class="admin-card">
+            <h2>Buscador de Películas Oficial</h2>
+            <p style="color:var(--text-secondary); margin-bottom: 20px;">Busca el nombre para extraer toda su información, pósters HD y géneros oficiales automáticamente en español.</p>
+            <form id="search-movie-form" style="display:flex; gap:10px; margin-bottom:20px;">
+                <input type="text" id="omdb-search-input" placeholder="Ingresa el Título Original (Ej: Avatar, Dune...)" style="flex:1; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f1523; color: white;" required>
+                <button type="submit" class="btn-primary" style="margin:0;">Buscar Poster</button>
+            </form>
+            <div id="search-results" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px;">
+                <!-- Resultados se montan dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Modal emergente para Edición -->
+        <div id="edit-modal" style="display:none; background: rgba(0,0,0,0.85); position: fixed; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; z-index:9999;">
+             <div class="admin-card" style="width: 100%; max-width: 450px; border: 2px solid var(--accent-color);">
+                 <h3 style="margin-bottom: 20px; font-size: 24px; color: white; text-align:center;">Editar Película</h3>
+                 <input type="hidden" id="edit-movie-id">
+                 <div class="form-group">
+                     <label>Título (Público)</label>
+                     <input type="text" id="edit-movie-title" style="font-size: 16px;">
+                 </div>
+                 <div class="form-group">
+                     <label>Precio del Ticket ($)</label>
+                     <input type="number" id="edit-movie-price" style="font-size: 16px;">
+                 </div>
+                     <label>Apto para Público</label>
+                     <input type="text" id="edit-movie-age" placeholder="Ej: ATP, +13, Solo +18" style="font-size: 16px;">
+                 </div>
+                 <div style="display:flex; justify-content:center; gap: 15px; margin-top:25px;">
+                      <button id="edit-modal-cancel" class="btn-danger">Cancelar</button>
+                      <button id="edit-modal-confirm" class="btn-primary" style="margin:0;">Guardar Cambios</button>
+                 </div>
+             </div>
+        </div>
+
+        <!-- Modal emergente para precio -->
+        <div id="price-modal" style="display:none; background: rgba(0,0,0,0.85); position: fixed; top:0; left:0; width:100%; height:100%; align-items:center; justify-content:center; z-index:9999;">
+             <div class="admin-card" style="width: 100%; max-width: 400px; text-align: center; border: 2px solid var(--accent-color);">
+                 <h3 id="modal-movie-title" style="margin-bottom: 15px; font-size: 24px; color: white;"></h3>
+                 <p style="margin-bottom: 20px; color: var(--text-secondary);">El título, género y póster se importarán en segundo plano. ¿A qué precio venderás las butacas para esta función?</p>
+                 <div class="form-group">
+                     <label>Precio del Ticket ($)</label>
+                     <input type="number" id="modal-price" value="5000" style="font-size: 20px; text-align: center; font-weight: bold; width: 50%; margin: 0 auto; display:block;">
+                 </div>
+                 <div style="display:flex; justify-content:center; gap: 15px; margin-top:25px;">
+                      <button id="modal-cancel" class="btn-danger">Cancelar</button>
+                      <button id="modal-confirm" class="btn-primary" style="margin:0;">Confirmar Traspaso</button>
+                 </div>
+             </div>
+        </div>
+
+        <div class="admin-card" style="margin-top: 30px; background: rgba(34, 197, 94, 0.05); border: 1px solid rgba(34, 197, 94, 0.2);">
+            <h2 style="color: #22c55e;">➕ Subir Película Manualmente</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 20px;">Permite forzar la creación de una obra subiendo un cartel diseñado por nosotros (ej: películas extranjeras ocultas, obras de teatro locales o cine independiente).</p>
+            
+            <form id="manual-movie-form" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div class="form-group">
+                    <label>Título de la Obra *</label>
+                    <input type="text" id="manual-title" required placeholder="Ej: Obra de Teatro Local">
+                </div>
+                <div class="form-group">
+                    <label>Género(s)</label>
+                    <input type="text" id="manual-genre" placeholder="Ej: Comedia, Acción">
+                </div>
+                <div class="form-group">
+                    <label>Clasificación de Edad</label>
+                    <select id="manual-age" style="width:100%; padding: 12px; font-size:16px; background: #0f1523; color:white; border-radius:8px;">
+                        <option value="ATP">ATP (Público General)</option>
+                        <option value="+13">Apta Mayores de 13</option>
+                        <option value="Solo +18">Solo Mayores de 18</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Precio de la Entrada *</label>
+                    <input type="number" id="manual-price" value="180" required>
+                </div>
+                <div class="form-group">
+                    <label>📸 Póster Vertical *</label>
+                    <input type="file" id="manual-poster" accept="image/*" required style="padding: 10px;">
+                </div>
+                <div class="form-group">
+                    <label>🌌 Fondo Panorámico (Cartelera Gigante)</label>
+                    <input type="file" id="manual-backdrop" accept="image/*" style="padding: 10px;">
+                </div>
+                <div style="grid-column: 1 / -1;">
+                    <button type="submit" id="btn-manual-submit" class="btn-primary" style="width: 100%; background: #22c55e; color: black; font-weight: bold;">Subir Archivos y Añadir a Cartelera</button>
+                </div>
+            </form>
+        </div>
+
+
+        
+        <div class="admin-card" style="margin-bottom: 30px;">
+            <h2 style="margin-bottom: 20px;">⚙️ Información General y Horarios</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+                <div class="form-group">
+                    <label>Precio: Entradas Generales</label>
+                    <input type="text" id="cfg-general-price" style="font-size: 16px;">
+                </div>
+                <div class="form-group">
+                    <label>Precio: Lunes Populares</label>
+                    <input type="text" id="cfg-popular-price" style="font-size: 16px;">
+                </div>
+                <div class="form-group">
+                    <label>Texto: Viernes y Lunes</label>
+                    <input type="text" id="cfg-weekdays" style="font-size: 16px;">
+                </div>
+                <div class="form-group">
+                    <label>Texto: Sábados y Domingos</label>
+                    <input type="text" id="cfg-weekends" style="font-size: 16px;">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Aviso: Matinée</label>
+                    <input type="text" id="cfg-matinee" style="font-size: 16px;">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>🚨 Aviso por Cierre Especial (Opcional. Ej: "Cerrado por Feriado")</label>
+                    <input type="text" id="cfg-closure-notice" style="font-size: 16px; border-color: #ef4444;" placeholder="Si está vacío, no se mostrará nada...">
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Controlador de Estado de la Puerta (Override Mágico)</label>
+                    <select id="cfg-status" style="width: 100%; padding: 12px; font-size: 16px; background: #0f1523; border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 8px; cursor: pointer;">
+                        <option value="auto">⏱️ Automático (Sigue el reloj normal del sistema)</option>
+                        <option value="open">🟢 Forzar Abierto Permanentemente</option>
+                        <option value="closed">🔴 Forzar Cerrado Permanentemente</option>
+                    </select>
+                </div>
+            </div>
+            <button id="btn-save-settings" class="btn-primary" style="margin-top: 10px; width: 100%;">Guardar y Publicar Configuración</button>
+        </div>
+
+        <div class="admin-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                <h2 style="margin: 0;">Gestión de Películas Activas</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button id="btn-bulk-delete" class="btn-primary" style="background: #f59e0b; color: black; font-weight: bold; padding: 10px 20px; border-radius: 8px; display: none;" onclick="bulkDeleteMovies()">🗑️ Eliminar Seleccionadas (0)</button>
+                    <button class="btn-danger" onclick="resetAllRooms()" style="background: #e50914; font-weight: bold; padding: 10px 20px; border-radius: 8px;">☢️ Limpiar TODAS las Salas</button>
+                </div>
+            </div>
+            <table id="movies-table">
+                <thead>
+                    <tr>
+                        <th style="width: 30px;"><input type="checkbox" id="select-all-movies" style="width: 18px; height: 18px; cursor: pointer;"></th>
+                        <th>ID</th>
+                        <th>Título</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Llenado por admin.js -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="admin.js"></script>
+</body>
+</html>
