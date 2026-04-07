@@ -58,15 +58,30 @@ header {
     color: var(--accent-color);
 }
 
-nav a {
+/* Base Nav Styles (Reemplazando estilos en linea) */
+.desktop-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.mobile-menu-toggle {
+    display: none; /* Oculto por defecto en PC */
+    font-size: 30px;
+    cursor: pointer;
+    color: var(--text-primary);
+    z-index: 2000;
+}
+
+.desktop-nav a {
     color: var(--text-primary);
     text-decoration: none;
-    margin-left: 30px;
     font-weight: 600;
     transition: color 0.3s;
 }
 
-nav a:hover {
+.desktop-nav a:hover {
     color: var(--accent-color);
 }
 
@@ -753,5 +768,148 @@ footer {
     flex-direction: column;
     align-items: center;
     gap: 20px;
+}
+
+/* ========================================= */
+/*  DISEÑO ADAPTATIVO (RESPONSIVE PARA MÓVIL)*/
+/* ========================================= */
+@media (max-width: 768px) {
+    /* Ajustes generales y de Header */
+    header {
+        padding: 10px 0;
+    }
+    
+    .inner-header {
+        flex-direction: row; /* En móvil, Logo a izquierda y Hamburguesa a derecha */
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .mobile-menu-toggle {
+        display: block; /* Mostramos el botón hamburguesa en Celulares */
+    }
+
+    /* Ocultar Barra y preparar Dropdown */
+    .desktop-nav {
+        position: fixed;
+        top: 0;
+        right: -100%; /* Totalmente escondido fuera de la pantalla */
+        width: 100vw;
+        height: 100vh; /* Ocupa pantalla completa tipo Telón */
+        background: rgba(11, 15, 25, 0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 30px !important;
+        margin-top: 0;
+        z-index: 1500;
+        transition: right 0.4s cubic-bezier(1,0,0,1);
+    }
+
+    /* Estado Activo del Menú Desplegable */
+    .desktop-nav.mobile-nav-active {
+        right: 0; /* Entra en la pantalla suavemente */
+    }
+
+    .desktop-nav a {
+        font-size: 22px;
+        margin-left: 0;
+    }
+
+    /* Modificación de Botón Primario para que se vea gigante y cómodo en Móvil */
+    #auth-container .btn-primary {
+        font-size: 20px !important;
+        padding: 15px 40px !important;
+        margin-top: 20px !important;
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    .logo {
+        font-size: 22px;
+        z-index: 2000; /* Asegurar que el logo quede encima de la cortina negra */
+    }
+
+    /* Hero Slider Responsive */
+    .hero-slider {
+        height: 65vh;
+        min-height: 450px;
+    }
+
+    .hero-slide-content {
+        bottom: 50px;
+        left: 20px;
+        right: 20px;
+        text-align: center;
+    }
+
+    .hero-slide-content h2 {
+        font-size: 32px;
+        text-shadow: 2px 2px 5px rgba(0,0,0,0.9);
+        margin-bottom: 15px;
+    }
+
+    .hero-tags {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+    .slider-indicators {
+        bottom: 10px;
+        right: 50%;
+        transform: translateX(50%);
+    }
+
+    /* Secciones Generales */
+    .cartelera-section, .horarios-section {
+        margin: 40px auto;
+        padding: 0 15px;
+    }
+
+    section h2 {
+        font-size: 28px;
+        margin-bottom: 30px;
+    }
+
+    /* Horarios Responsive */
+    .horarios-card {
+        padding: 25px 15px;
+    }
+
+    .horario-list li {
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        text-align: center;
+        font-size: 16px;
+    }
+
+    .horario-list .time {
+        text-align: center !important;
+    }
+
+    /* Cart Responsive */
+    .cart-page {
+        margin: 120px auto 40px auto;
+        padding: 15px;
+    }
+
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .cart-item-actions {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
 }
 
